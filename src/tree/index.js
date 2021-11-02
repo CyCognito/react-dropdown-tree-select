@@ -87,28 +87,29 @@ class Tree extends Component {
       clientId,
     } = props
     const items = []
-    data.forEach(node => {
-      if (this.shouldRenderNode(node, props)) {
-        items.push(
-          <TreeNode
-            keepTreeOnSearch={keepTreeOnSearch}
-            keepChildrenOnSearch={keepChildrenOnSearch}
-            key={node._id}
-            {...node}
-            searchModeOn={searchModeOn}
-            onChange={onChange}
-            onCheckboxChange={onCheckboxChange}
-            onNodeToggle={onNodeToggle}
-            onAction={onAction}
-            mode={mode}
-            showPartiallySelected={showPartiallySelected}
-            readOnly={readOnly}
-            clientId={clientId}
-            activeDescendant={activeDescendant}
-          />
-        )
-      }
-    })
+    data &&
+      data.forEach(node => {
+        if (this.shouldRenderNode(node, props)) {
+          items.push(
+            <TreeNode
+              keepTreeOnSearch={keepTreeOnSearch}
+              keepChildrenOnSearch={keepChildrenOnSearch}
+              key={node._id}
+              {...node}
+              searchModeOn={searchModeOn}
+              onChange={onChange}
+              onCheckboxChange={onCheckboxChange}
+              onNodeToggle={onNodeToggle}
+              onAction={onAction}
+              mode={mode}
+              showPartiallySelected={showPartiallySelected}
+              readOnly={readOnly}
+              clientId={clientId}
+              activeDescendant={activeDescendant}
+            />
+          )
+        }
+      })
     return items
   }
 
