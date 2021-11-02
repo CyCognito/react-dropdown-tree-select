@@ -5,15 +5,6 @@ import React, { Component } from 'react'
 import TreeNode from '../tree-node'
 import { findIndex } from '../utils'
 
-const shouldRenderNode = (node, searchModeOn, data) => {
-  if (searchModeOn || node.expanded) return true
-
-  const parent = node._parent && data.get(node._parent)
-  // if it has a parent, then check parent's state.
-  // otherwise root nodes are always rendered
-  return !parent || parent.expanded
-}
-
 class Tree extends Component {
   static propTypes = {
     data: PropTypes.object,
@@ -68,6 +59,17 @@ class Tree extends Component {
     }
   }
 
+  shouldRenderNode = (node, props) => {
+    const { data, searchModeOn } = props
+    const { expanded, _parent } = node
+    if (searchModeOn || expanded) return true
+
+    const parent = _parent && data.get(_parent)
+    // if it has a parent, then check parent's state.
+    // otherwise root nodes are always rendered
+    return !parent || parent.expanded
+  }
+
   getNodes = props => {
     const {
       data,
@@ -85,28 +87,29 @@ class Tree extends Component {
       clientId,
     } = props
     const items = []
-    data.forEach(node => {
-      if (shouldRenderNode(node, searchModeOn, data)) {
-        items.push(
-          <TreeNode
-            keepTreeOnSearch={keepTreeOnSearch}
-            keepChildrenOnSearch={keepChildrenOnSearch}
-            key={node._id}
-            {...node}
-            searchModeOn={searchModeOn}
-            onChange={onChange}
-            onCheckboxChange={onCheckboxChange}
-            onNodeToggle={onNodeToggle}
-            onAction={onAction}
-            mode={mode}
-            showPartiallySelected={showPartiallySelected}
-            readOnly={readOnly}
-            clientId={clientId}
-            activeDescendant={activeDescendant}
-          />
-        )
-      }
-    })
+    data &&
+      data.forEach(node => {
+        if (this.shouldRenderNode(node, props)) {
+          items.push(
+            <TreeNode
+              keepTreeOnSearch={keepTreeOnSearch}
+              keepChildrenOnSearch={keepChildrenOnSearch}
+              key={node._id}
+              {...node}
+              searchModeOn={searchModeOn}
+              onChange={onChange}
+              onCheckboxChange={onCheckboxChange}
+              onNodeToggle={onNodeToggle}
+              onAction={onAction}
+              mode={mode}
+              showPartiallySelected={showPartiallySelected}
+              readOnly={readOnly}
+              clientId={clientId}
+              activeDescendant={activeDescendant}
+            />
+          )
+        }
+      })
     return items
   }
 
